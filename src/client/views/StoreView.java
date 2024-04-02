@@ -1,9 +1,13 @@
-package views;
+package client.views;
 
-import controllers.CartController;
-import controllers.ProductController;
-import controllers.UserController;
+import client.controllers.CartController;
+import client.controllers.ProductController;
+import client.controllers.UserController;
+import common.services.CartService;
+import common.services.ProductService;
+import common.services.UserService;
 
+import java.rmi.Naming;
 import java.util.Scanner;
 
 public class StoreView {
@@ -15,9 +19,24 @@ public class StoreView {
     private static Scanner sc;
 
     public static void main(String[] args) {
-        userController = new UserController();
-        productController = new ProductController();
-        cartController = new CartController();
+
+        System.out.println("*** Connecting to Server ***");
+        UserService stubUser = null;
+        ProductService stubProduct = null;
+        CartService stubCart = null;
+        try {
+            stubUser = (UserService) Naming.lookup("store-user");
+            stubProduct = (ProductService) Naming.lookup("store-product");
+            stubCart = (CartService) Naming.lookup("store-cart");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("*** Connection Successful");
+
+        userController = new UserController(stubUser);
+        productController = new ProductController(stubProduct);
+        cartController = new CartController(stubCart, stubProduct);
+
         sc = new Scanner(System.in);
 
         System.out.println("********* WELCOME *********");

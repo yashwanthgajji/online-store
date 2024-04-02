@@ -1,17 +1,22 @@
-package serviceImpls;
+package server.serviceImpls;
 
-import models.Product;
-import repos.ProductRepo;
-import services.ProductService;
+import common.models.Product;
+import server.repos.ProductRepo;
+import common.services.ProductService;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends UnicastRemoteObject implements ProductService {
 
     private final ProductRepo productRepo = ProductRepo.getProductRepoInstance();
+
+    public ProductServiceImpl() throws RemoteException {
+    }
 
     @Override
     public void addNewProduct(Product product) {

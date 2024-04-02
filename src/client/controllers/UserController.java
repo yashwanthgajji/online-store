@@ -1,8 +1,7 @@
-package controllers;
+package client.controllers;
 
-import models.User;
-import serviceImpls.UserServiceImpl;
-import services.UserService;
+import common.models.User;
+import common.services.UserService;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +10,8 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController() {
-        userService = new UserServiceImpl();
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     public String getUserName(String userID) {

@@ -1,8 +1,7 @@
-package controllers;
+package client.controllers;
 
-import models.Product;
-import serviceImpls.ProductServiceImpl;
-import services.ProductService;
+import common.models.Product;
+import common.services.ProductService;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +10,8 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController() {
-        productService = new ProductServiceImpl();
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     public void viewAllProducts() {

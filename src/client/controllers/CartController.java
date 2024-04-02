@@ -1,11 +1,9 @@
-package controllers;
+package client.controllers;
 
-import models.CartItem;
-import models.Product;
-import serviceImpls.CartServiceImpl;
-import serviceImpls.ProductServiceImpl;
-import services.CartService;
-import services.ProductService;
+import common.models.CartItem;
+import common.models.Product;
+import common.services.CartService;
+import common.services.ProductService;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +13,9 @@ public class CartController {
     private final CartService cartService;
     private final ProductService productService;
 
-    public CartController() {
-        cartService = new CartServiceImpl();
-        productService = new ProductServiceImpl();
+    public CartController(CartService cartService, ProductService productService) {
+        this.cartService = cartService;
+        this.productService = productService;
     }
 
     public void addItemToCart(String userID, String productID, int qty) {

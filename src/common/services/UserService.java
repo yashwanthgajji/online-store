@@ -1,11 +1,12 @@
-package services;
+package common.services;
 
-import models.User;
+import common.models.User;
 
+import java.rmi.Remote;
 import java.util.List;
 import java.util.UUID;
 
-public interface UserService {
+public interface UserService extends Remote {
     public void registerNewCustomer(User user);
     public UUID login(String email, String password);
     public void addNewAdmin(User user);

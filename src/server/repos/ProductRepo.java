@@ -1,6 +1,6 @@
-package repos;
+package server.repos;
 
-import models.Product;
+import common.models.Product;
 
 import java.util.HashMap;
 import java.util.Map;

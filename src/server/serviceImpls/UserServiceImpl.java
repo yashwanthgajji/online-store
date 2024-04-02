@@ -1,18 +1,23 @@
-package serviceImpls;
+package server.serviceImpls;
 
-import enums.UserRole;
-import models.User;
-import repos.UserRepo;
-import services.UserService;
+import common.enums.UserRole;
+import common.models.User;
+import server.repos.UserRepo;
+import common.services.UserService;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends UnicastRemoteObject implements UserService {
 
     private final UserRepo userRepo = UserRepo.getUserRepoInstance();
+
+    public UserServiceImpl() throws RemoteException {
+    }
 
     @Override
     public void registerNewCustomer(User user) {

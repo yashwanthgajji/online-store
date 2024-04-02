@@ -1,7 +1,7 @@
-package repos;
+package server.repos;
 
-import enums.UserRole;
-import models.User;
+import common.enums.UserRole;
+import common.models.User;
 
 import java.util.HashMap;
 import java.util.Map;
