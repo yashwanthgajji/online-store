@@ -1,8 +1,9 @@
 package common.models;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class CartItem {
+public class CartItem implements Serializable {
     private UUID cartItemID;
     private UUID productID;
     private int quantityInCart;

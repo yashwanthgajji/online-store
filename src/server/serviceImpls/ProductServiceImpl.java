@@ -19,32 +19,32 @@ public class ProductServiceImpl extends UnicastRemoteObject implements ProductSe
     }
 
     @Override
-    public void addNewProduct(Product product) {
+    public void addNewProduct(Product product) throws RemoteException {
         productRepo.insertProduct(product);
     }
 
     @Override
-    public void removeProduct(UUID productID) {
+    public void removeProduct(UUID productID) throws RemoteException {
         productRepo.deleteProductByID(productID);
     }
 
     @Override
-    public boolean updateItemDescription(UUID productID, String newDesc) {
+    public boolean updateItemDescription(UUID productID, String newDesc) throws RemoteException {
         return productRepo.updateProductDescriptionByID(productID, newDesc);
     }
 
     @Override
-    public boolean updateItemPrice(UUID productID, double newPrice) {
+    public boolean updateItemPrice(UUID productID, double newPrice) throws RemoteException {
         return productRepo.updateProductPriceByID(productID, newPrice);
     }
 
     @Override
-    public boolean updateItemQuantity(UUID productID, int newQuantity) {
+    public boolean updateItemQuantity(UUID productID, int newQuantity) throws RemoteException {
         return productRepo.updateProductQuantityByID(productID, newQuantity);
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts() throws RemoteException {
         List<Product> allProducts = new ArrayList<>();
         Map<UUID, Product> productMap = productRepo.getALlProducts();
         for (Map.Entry<UUID, Product> productEntry: productMap.entrySet()) {
@@ -54,7 +54,7 @@ public class ProductServiceImpl extends UnicastRemoteObject implements ProductSe
     }
 
     @Override
-    public Product getProduct(UUID productID) {
+    public Product getProduct(UUID productID) throws RemoteException {
         return productRepo.getProductByID(productID);
     }
 }

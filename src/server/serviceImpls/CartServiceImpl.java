@@ -19,22 +19,22 @@ public class CartServiceImpl extends UnicastRemoteObject implements CartService 
     }
 
     @Override
-    public void addItemToCart(UUID userID, CartItem cartItem) {
+    public void addItemToCart(UUID userID, CartItem cartItem) throws RemoteException {
         cartRepo.addNewCartItem(userID, cartItem);
     }
 
     @Override
-    public void updateItemQuantityInCart(UUID userID, UUID cartItemID, int quantity) {
+    public void updateItemQuantityInCart(UUID userID, UUID cartItemID, int quantity) throws RemoteException {
         cartRepo.updateCartItemQuantity(userID, cartItemID, quantity);
     }
 
     @Override
-    public void removeItemFromCart(UUID userID, UUID cartItemID) {
+    public void removeItemFromCart(UUID userID, UUID cartItemID) throws RemoteException {
         cartRepo.deleteCartItem(userID, cartItemID);
     }
 
     @Override
-    public List<CartItem> getAllUserCartItems(UUID userID) {
+    public List<CartItem> getAllUserCartItems(UUID userID) throws RemoteException {
         List<CartItem> allCartItems = new ArrayList<>();
         Map<UUID, CartItem> cartItemMap = cartRepo.getAllUserCartItems(userID);
         if (cartItemMap != null) {
@@ -46,7 +46,7 @@ public class CartServiceImpl extends UnicastRemoteObject implements CartService 
     }
 
     @Override
-    public CartItem getCartItem(UUID userID, UUID cartItemID) {
+    public CartItem getCartItem(UUID userID, UUID cartItemID) throws RemoteException {
         return cartRepo.getCartItem(userID, cartItemID);
     }
 }

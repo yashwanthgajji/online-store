@@ -2,9 +2,9 @@ package server.repos;
 
 import common.models.CartItem;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CartRepo {
     private static CartRepo cartRepoInstance = null;
@@ -19,7 +19,7 @@ public class CartRepo {
     private final Map<UUID, Map<UUID, CartItem>> cartItemsByUserIDs;
 
     private CartRepo() {
-        cartItemsByUserIDs = new HashMap<>();
+        cartItemsByUserIDs = new ConcurrentHashMap<>();
     }
 
     public void addNewCartItem(UUID userID, CartItem cartItem) {
@@ -27,7 +27,7 @@ public class CartRepo {
         if (cartItemsByUserIDs.containsKey(userID)) {
             userCart = cartItemsByUserIDs.get(userID);
         } else {
-            userCart = new HashMap<>();
+            userCart = new ConcurrentHashMap<>();
         }
         userCart.put(cartItem.getCartItemID(), cartItem);
         cartItemsByUserIDs.put(userID, userCart);

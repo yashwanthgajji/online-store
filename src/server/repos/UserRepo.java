@@ -3,9 +3,9 @@ package server.repos;
 import common.enums.UserRole;
 import common.models.User;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserRepo {
 
@@ -21,7 +21,7 @@ public class UserRepo {
     }
 
     private UserRepo() {
-        users = new HashMap<>();
+        users = new ConcurrentHashMap<>();
         User a1 = new User("admin1", "root", "root", UserRole.ADMIN);
         this.users.put(a1.getUserID(), a1);
     }
