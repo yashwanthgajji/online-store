@@ -3,6 +3,7 @@ package client.controllers;
 import common.models.Product;
 import common.services.ProductService;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    public void viewAllProducts() {
+    public void viewAllProducts() throws RemoteException {
         List<Product> products = productService.getAllProducts();
         System.out.println("********* PRODUCTS *********");
         StringBuilder sb = new StringBuilder();
@@ -39,25 +40,25 @@ public class ProductController {
         System.out.println(sb);
     }
 
-    public void addNewProduct(String name, String desc, double price, int qty) {
+    public void addNewProduct(String name, String desc, double price, int qty) throws RemoteException {
         Product product = new Product(name, desc, price, qty);
         productService.addNewProduct(product);
     }
 
-    public void removeProduct(String productID) {
+    public void removeProduct(String productID) throws RemoteException {
         productService.removeProduct(UUID.fromString(productID));
     }
 
-    public void updateItemDescription(String pid, String newDesc) {
+    public void updateItemDescription(String pid, String newDesc) throws RemoteException {
         productService.updateItemDescription(UUID.fromString(pid), newDesc);
     }
 
-    public void updateItemPrice(String pid, double newPrice) {
+    public void updateItemPrice(String pid, double newPrice) throws RemoteException {
         productService.updateItemPrice(UUID.fromString(pid), newPrice);
     }
 
 
-    public void updateItemQuantity(String pid, int newQty) {
+    public void updateItemQuantity(String pid, int newQty) throws RemoteException {
         productService.updateItemQuantity(UUID.fromString(pid), newQty);
     }
 }

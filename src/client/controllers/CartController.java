@@ -5,6 +5,7 @@ import common.models.Product;
 import common.services.CartService;
 import common.services.ProductService;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class CartController {
         this.productService = productService;
     }
 
-    public void addItemToCart(String userID, String productID, int qty) {
+    public void addItemToCart(String userID, String productID, int qty) throws RemoteException {
         Product product = productService.getProduct(UUID.fromString(productID));
         if (product.getQuantityAvailable() >=  qty) {
             CartItem cartItem = new CartItem(UUID.fromString(productID), qty);
@@ -28,7 +29,7 @@ public class CartController {
         }
     }
 
-    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) {
+    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) throws RemoteException {
         UUID uid = UUID.fromString(userID);
         UUID cid = UUID.fromString(cartItemID);
         CartItem cartItem = cartService.getCartItem(uid, cid);
@@ -44,7 +45,7 @@ public class CartController {
         cartService.removeItemFromCart(UUID.fromString(userID), UUID.fromString(cartItemID));
     }
 
-    public void viewAllCartItems(String userID) {
+    public void viewAllCartItems(String userID) throws RemoteException {
         List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
         System.out.println("********* CART *********");
         StringBuilder sb = new StringBuilder();
@@ -70,7 +71,7 @@ public class CartController {
         System.out.println(sb);
     }
 
-    public void purchase(String userID) {
+    public void purchase(String userID) throws RemoteException {
         UUID uid = UUID.fromString(userID);
         List<CartItem> cartItems = cartService.getAllUserCartItems(uid);
         double totalPurchaseCost = 0;

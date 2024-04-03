@@ -160,7 +160,7 @@ public class StoreView {
         }
     }
 
-    private static void customerCartPage() {
+    private static void customerCartPage() throws RemoteException {
         int action = -1;
         while (action != 4) {
             cartController.viewAllCartItems(sessionUserID);
@@ -265,7 +265,7 @@ public class StoreView {
         }
     }
 
-    private static void adminProductsPage() {
+    private static void adminProductsPage() throws RemoteException {
         int action = -1;
         while (action != 6) {
             productController.viewAllProducts();
