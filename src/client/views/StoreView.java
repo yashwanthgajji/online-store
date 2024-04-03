@@ -8,6 +8,7 @@ import common.services.ProductService;
 import common.services.UserService;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class StoreView {
@@ -28,37 +29,38 @@ public class StoreView {
             stubUser = (UserService) Naming.lookup("store-user");
             stubProduct = (ProductService) Naming.lookup("store-product");
             stubCart = (CartService) Naming.lookup("store-cart");
+
+            System.out.println("*** Connection Successful");
+
+            userController = new UserController(stubUser);
+            productController = new ProductController(stubProduct);
+            cartController = new CartController(stubCart, stubProduct);
+
+            sc = new Scanner(System.in);
+
+            System.out.println("********* WELCOME *********");
+            System.out.println("""
+                    1. Register
+                    2. Login
+                    """);
+            int regLog = Integer.parseInt(sc.nextLine());
+            if (regLog == 1) {
+                registrationPage();
+            } else {
+                loginPage();
+            }
+            if (sessionUserID != null) {
+                System.out.println("Welcome " + userController.getUserName(sessionUserID));
+                startDashboard();
+            } else {
+                System.out.println("Registration/Login unsuccessful");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("*** Connection Successful");
-
-        userController = new UserController(stubUser);
-        productController = new ProductController(stubProduct);
-        cartController = new CartController(stubCart, stubProduct);
-
-        sc = new Scanner(System.in);
-
-        System.out.println("********* WELCOME *********");
-        System.out.println("""
-                1. Register
-                2. Login
-                """);
-        int regLog = Integer.parseInt(sc.nextLine());
-        if (regLog == 1) {
-            registrationPage();
-        } else {
-            loginPage();
-        }
-        if (sessionUserID != null) {
-            System.out.println("Welcome " + userController.getUserName(sessionUserID));
-            startDashboard();
-        } else {
-            System.out.println("Registration/Login unsuccessful");
-        }
     }
 
-    private static void registrationPage() {
+    private static void registrationPage() throws RemoteException {
         System.out.println("********* REGISTRATION *********");
         System.out.println("Enter Name....");
         String name = sc.nextLine();
@@ -71,7 +73,7 @@ public class StoreView {
         System.out.println("Registration Successful");
     }
 
-    private static void loginPage() {
+    private static void loginPage() throws RemoteException {
         System.out.println("********* LOGIN *********");
         System.out.println("Enter Email....");
         String email = sc.nextLine();
@@ -82,7 +84,7 @@ public class StoreView {
         System.out.println("Login Successful....");
     }
 
-    private static void startDashboard() {
+    private static void startDashboard() throws Exception {
         System.out.println("********* DASHBOARD *********");
         if (userController.isUserAdmin(sessionUserID)) {
             int action = -1;
@@ -159,7 +161,7 @@ public class StoreView {
         }
     }
 
-    private static void customerCartPage() {
+    private static void customerCartPage() throws Exception {
         int action = -1;
         while (action != 4) {
             cartController.viewAllCartItems(sessionUserID);
@@ -207,7 +209,7 @@ public class StoreView {
         }
     }
 
-    private static void registerAdminPage() {
+    private static void registerAdminPage() throws RemoteException {
         System.out.println("********* ADMIN REGISTRATION *********");
         System.out.println("Enter Name....");
         String name = sc.nextLine();
@@ -220,7 +222,7 @@ public class StoreView {
         System.out.println("Admin Registration Successful");
     }
 
-    private static void adminCustomersPage() {
+    private static void adminCustomersPage() throws RemoteException {
         int action = -1;
         while (action != 3) {
             userController.viewAllCustomers();
@@ -264,7 +266,7 @@ public class StoreView {
         }
     }
 
-    private static void adminProductsPage() {
+    private static void adminProductsPage() throws Exception {
         int action = -1;
         while (action != 6) {
             productController.viewAllProducts();

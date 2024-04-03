@@ -2,31 +2,26 @@ package server.repos;
 
 import common.models.Product;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductRepo {
-    private static ProductRepo productRepoInstance = null;
-    public static ProductRepo getProductRepoInstance() {
-        if (productRepoInstance == null) {
-            productRepoInstance = new ProductRepo();
-        }
-        return productRepoInstance;
-    }
+//    private static ProductRepo productRepoInstance = null;
+//    public static ProductRepo getProductRepoInstance() {
+//        if (productRepoInstance == null) {
+//            productRepoInstance = new ProductRepo();
+//        }
+//        return productRepoInstance;
+//    }
 
-    private final Map<UUID, Product> products;
+    private ConcurrentHashMap<UUID, Product> products;
 
-    private ProductRepo() {
-        products = new HashMap<>();
+    public ProductRepo() {
+        products = new ConcurrentHashMap<>();
         Product s1 = new Product("Shirt", "Shirt", 13.56, 11);
         this.products.put(s1.getProductID(), s1);
         Product s2 = new Product("Hammer", "Hammer", 35.99, 7);
         this.products.put(s2.getProductID(), s2);
-    }
-
-    public static void setProductRepoInstance(ProductRepo productRepoInstance) {
-        ProductRepo.productRepoInstance = productRepoInstance;
     }
 
     public void insertProduct(Product product) {
@@ -74,7 +69,7 @@ public class ProductRepo {
         }
     }
 
-    public Map<UUID, Product> getALlProducts() {
+    public ConcurrentHashMap<UUID, Product> getALlProducts() {
         return products;
     }
 }

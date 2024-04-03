@@ -3,7 +3,8 @@ package client.controllers;
 import common.models.User;
 import common.services.UserService;
 
-import java.util.List;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserController {
@@ -14,57 +15,36 @@ public class UserController {
         this.userService = userService;
     }
 
-    public String getUserName(String userID) {
-        return userService.getUserName(UUID.fromString(userID));
+    public String getUserName(String userID) throws RemoteException {
+        return userService.getUserName(userID);
     }
 
-    public String registerNewCustomer(String name, String email, String password) {
-        User user = new User(name, email, password);
-        userService.registerNewCustomer(user);
-        return user.getUserID().toString();
+    public String registerNewCustomer(String name, String email, String password) throws RemoteException {
+        return userService.registerNewCustomer(name, email, password);
     }
 
-    public String login(String email, String password) {
-        return userService.login(email, password).toString();
+    public String login(String email, String password) throws RemoteException {
+        return userService.login(email, password);
     }
 
-    public boolean isUserAdmin(String userID) {
-        return userService.isUserAdmin(UUID.fromString(userID));
+    public boolean isUserAdmin(String userID) throws RemoteException {
+        return userService.isUserAdmin(userID);
     }
 
-    public void addNewAdmin(String name, String email, String password) {
-        User admin = new User(name, email, password);
-        userService.addNewAdmin(admin);
+    public void addNewAdmin(String name, String email, String password) throws RemoteException {
+        userService.addNewAdmin(name, email, password);
     }
 
-    public void viewAllCustomers() {
-        List<User> customers = userService.getAllCustomers();
-        System.out.println("********* CUSTOMERS *********");
-        StringBuilder sb = new StringBuilder();
-        sb.append("S.NO")
-                .append("\t").append("Customer ID")
-                .append("\t").append("Customer Name")
-                .append("\t").append("Email")
-                .append("\n");
-        int i=1;
-        for (User customer : customers) {
-            sb.append(i)
-                    .append("\t").append(customer.getUserID())
-                    .append("\t").append(customer.getName())
-                    .append("\t").append(customer.getEmail())
-                    .append("\n");
-            i++;
-        }
-        System.out.println(sb);
+    public void viewAllCustomers() throws RemoteException {
+        System.out.println(userService.getAllCustomers());
     }
 
-    public void addNewCustomer(String name, String email, String password) {
-        User customer = new User(name, email, password);
-        userService.addNewCustomer(customer);
+    public void addNewCustomer(String name, String email, String password) throws RemoteException {
+        userService.addNewCustomer(name, email, password);
     }
 
 
-    public void removeCustomer(String userID) {
-        userService.removeCustomer(UUID.fromString(userID));
+    public void removeCustomer(String userID) throws RemoteException {
+        userService.removeCustomer(userID);
     }
 }

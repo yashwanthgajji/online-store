@@ -1,18 +1,15 @@
 package common.services;
 
-import common.models.User;
-
 import java.rmi.Remote;
-import java.util.List;
-import java.util.UUID;
+import java.rmi.RemoteException;
 
 public interface UserService extends Remote {
-    public void registerNewCustomer(User user);
-    public UUID login(String email, String password);
-    public void addNewAdmin(User user);
-    public void addNewCustomer(User user);
-    public void removeCustomer(UUID userID);
-    public boolean isUserAdmin(UUID userID);
-    public List<User> getAllCustomers();
-    public String getUserName(UUID userID);
+    public String registerNewCustomer(String name, String email, String password) throws RemoteException;
+    public String login(String email, String password) throws RemoteException;
+    public void addNewAdmin(String name, String email, String password) throws RemoteException;
+    public void addNewCustomer(String name, String email, String password) throws RemoteException;
+    public void removeCustomer(String userID) throws RemoteException;
+    public boolean isUserAdmin(String userID) throws RemoteException;
+    public String getAllCustomers() throws RemoteException;
+    public String getUserName(String userID) throws RemoteException;
 }

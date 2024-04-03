@@ -7,54 +7,53 @@ import common.services.ProductService;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductServiceImpl extends UnicastRemoteObject implements ProductService {
 
-    private final ProductRepo productRepo = ProductRepo.getProductRepoInstance();
+    private ProductRepo productRepo = new ProductRepo();
 
     public ProductServiceImpl() throws RemoteException {
     }
 
     @Override
-    public void addNewProduct(Product product) {
+    public void addNewProduct(Product product) throws Exception {
         productRepo.insertProduct(product);
     }
 
     @Override
-    public void removeProduct(UUID productID) {
+    public void removeProduct(UUID productID) throws Exception {
         productRepo.deleteProductByID(productID);
     }
 
     @Override
-    public boolean updateItemDescription(UUID productID, String newDesc) {
+    public boolean updateItemDescription(UUID productID, String newDesc) throws Exception {
         return productRepo.updateProductDescriptionByID(productID, newDesc);
     }
 
     @Override
-    public boolean updateItemPrice(UUID productID, double newPrice) {
+    public boolean updateItemPrice(UUID productID, double newPrice) throws Exception {
         return productRepo.updateProductPriceByID(productID, newPrice);
     }
 
     @Override
-    public boolean updateItemQuantity(UUID productID, int newQuantity) {
+    public boolean updateItemQuantity(UUID productID, int newQuantity) throws Exception {
         return productRepo.updateProductQuantityByID(productID, newQuantity);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        List<Product> allProducts = new ArrayList<>();
-        Map<UUID, Product> productMap = productRepo.getALlProducts();
-        for (Map.Entry<UUID, Product> productEntry: productMap.entrySet()) {
+    public ArrayList<Product> getAllProducts() throws Exception {
+        ArrayList<Product> allProducts = new ArrayList<>();
+        ConcurrentHashMap<UUID, Product> productMap = productRepo.getALlProducts();
+        for (ConcurrentHashMap.Entry<UUID, Product> productEntry: productMap.entrySet()) {
             allProducts.add(productEntry.getValue());
         }
         return allProducts;
     }
 
     @Override
-    public Product getProduct(UUID productID) {
+    public Product getProduct(UUID productID) throws Exception {
         return productRepo.getProductByID(productID);
     }
 }

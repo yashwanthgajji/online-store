@@ -5,7 +5,7 @@ import common.models.Product;
 import common.services.CartService;
 import common.services.ProductService;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class CartController {
@@ -18,17 +18,16 @@ public class CartController {
         this.productService = productService;
     }
 
-    public void addItemToCart(String userID, String productID, int qty) {
+    public void addItemToCart(String userID, String productID, int qty) throws Exception {
         Product product = productService.getProduct(UUID.fromString(productID));
         if (product.getQuantityAvailable() >=  qty) {
-            CartItem cartItem = new CartItem(UUID.fromString(productID), qty);
-            cartService.addItemToCart(UUID.fromString(userID), cartItem);
+            cartService.addItemToCart(userID, productID, qty);
         } else {
             System.out.println("Try less quantity. Stock not available");
         }
     }
 
-    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) {
+    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) throws Exception {
         UUID uid = UUID.fromString(userID);
         UUID cid = UUID.fromString(cartItemID);
         CartItem cartItem = cartService.getCartItem(uid, cid);
@@ -40,12 +39,12 @@ public class CartController {
         }
     }
 
-    public void removeItemFromCart(String userID, String cartItemID) {
+    public void removeItemFromCart(String userID, String cartItemID) throws Exception {
         cartService.removeItemFromCart(UUID.fromString(userID), UUID.fromString(cartItemID));
     }
 
-    public void viewAllCartItems(String userID) {
-        List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
+    public void viewAllCartItems(String userID) throws Exception {
+        ArrayList<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
         System.out.println("********* CART *********");
         StringBuilder sb = new StringBuilder();
         sb.append("S.NO")
@@ -70,9 +69,9 @@ public class CartController {
         System.out.println(sb);
     }
 
-    public void purchase(String userID) {
+    public void purchase(String userID) throws Exception {
         UUID uid = UUID.fromString(userID);
-        List<CartItem> cartItems = cartService.getAllUserCartItems(uid);
+        ArrayList<CartItem> cartItems = cartService.getAllUserCartItems(uid);
         double totalPurchaseCost = 0;
         System.out.println("********* RECEIPT *********");
         System.out.println("Your order contains...");
