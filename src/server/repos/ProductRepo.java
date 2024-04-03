@@ -2,9 +2,9 @@ package server.repos;
 
 import common.models.Product;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductRepo {
     private static ProductRepo productRepoInstance = null;
@@ -18,7 +18,7 @@ public class ProductRepo {
     private final Map<UUID, Product> products;
 
     private ProductRepo() {
-        products = new HashMap<>();
+        products = new ConcurrentHashMap<>();
         Product s1 = new Product("Shirt", "Shirt", 13.56, 11);
         this.products.put(s1.getProductID(), s1);
         Product s2 = new Product("Hammer", "Hammer", 35.99, 7);
