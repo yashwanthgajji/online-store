@@ -20,12 +20,12 @@ public class UserServiceImpl extends UnicastRemoteObject implements UserService 
     }
 
     @Override
-    public void registerNewCustomer(User user) {
+    public void registerNewCustomer(User user) throws RemoteException {
         addNewCustomer(user);
     }
 
     @Override
-    public UUID login(String email, String password) {
+    public UUID login(String email, String password) throws RemoteException {
         Map<UUID, User> allUsers = userRepo.getAllUsers();
         for (Map.Entry<UUID, User> userEntry: allUsers.entrySet()) {
             User user = userEntry.getValue();
@@ -37,29 +37,29 @@ public class UserServiceImpl extends UnicastRemoteObject implements UserService 
     }
 
     @Override
-    public void addNewAdmin(User user) {
+    public void addNewAdmin(User user) throws RemoteException {
         user.setRole(UserRole.ADMIN);
         userRepo.addNewUser(user);
     }
 
     @Override
-    public void addNewCustomer(User user) {
+    public void addNewCustomer(User user) throws RemoteException {
         user.setRole(UserRole.CUSTOMER);
         userRepo.addNewUser(user);
     }
 
     @Override
-    public void removeCustomer(UUID userID) {
+    public void removeCustomer(UUID userID) throws RemoteException {
         userRepo.removeUserByID(userID);
     }
 
     @Override
-    public boolean isUserAdmin(UUID userID) {
+    public boolean isUserAdmin(UUID userID) throws RemoteException {
         return userRepo.getUserByID(userID).getRole() == UserRole.ADMIN;
     }
 
     @Override
-    public List<User> getAllCustomers() {
+    public List<User> getAllCustomers() throws RemoteException {
         List<User> customerList = new ArrayList<>();
         Map<UUID, User> allUsers = userRepo.getAllUsers();
         for (Map.Entry<UUID, User> userEntry: allUsers.entrySet()) {
@@ -72,7 +72,7 @@ public class UserServiceImpl extends UnicastRemoteObject implements UserService 
     }
 
     @Override
-    public String getUserName(UUID userID) {
+    public String getUserName(UUID userID) throws RemoteException {
         return userRepo.getUserByID(userID).getName();
     }
 }
