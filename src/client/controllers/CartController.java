@@ -41,7 +41,7 @@ public class CartController {
         }
     }
 
-    public void removeItemFromCart(String userID, String cartItemID) {
+    public void removeItemFromCart(String userID, String cartItemID) throws RemoteException {
         cartService.removeItemFromCart(UUID.fromString(userID), UUID.fromString(cartItemID));
     }
 
