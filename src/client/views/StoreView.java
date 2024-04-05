@@ -3,6 +3,7 @@ package client.views;
 import client.controllers.CartController;
 import client.controllers.ProductController;
 import client.controllers.UserController;
+import common.ServerDetails;
 import common.services.CartService;
 import common.services.ProductService;
 import common.services.UserService;
@@ -19,16 +20,16 @@ public class StoreView {
     private static String sessionUserID;
     private static Scanner sc;
 
-    public static void main(String[] args) throws RemoteException {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("*** Connecting to Server ***");
         UserService stubUser = null;
         ProductService stubProduct = null;
         CartService stubCart = null;
         try {
-            stubUser = (UserService) Naming.lookup("store-user");
-            stubProduct = (ProductService) Naming.lookup("store-product");
-            stubCart = (CartService) Naming.lookup("store-cart");
+            stubUser = (UserService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
+            stubProduct = (ProductService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.PRODUCT_STUB_NAME);
+            stubCart = (CartService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.CART_STUB_NAME);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,11 +41,13 @@ public class StoreView {
 
         sc = new Scanner(System.in);
 
+        startView();
+    }
+
+    private static void startView() throws Exception {
         System.out.println("********* WELCOME *********");
-        System.out.println("""
-                1. Register
-                2. Login
-                """);
+        System.out.println("1. Register\n" +
+                           "2. Login\n");
         int regLog = Integer.parseInt(sc.nextLine());
         if (regLog == 1) {
             registrationPage();
@@ -89,12 +92,10 @@ public class StoreView {
             int action = -1;
             while (action != 4) {
                 System.out.println("********* ACTIONS *********");
-                System.out.println("""
-                    1. View Products
-                    2. View Customers
-                    3. Add new Admin
-                    4. Logout
-                    """);
+                System.out.println("1. View Products\n" +
+                                   "2. View Customers\n" +
+                                   "3. Add new Admin\n" +
+                                   "4. Logout\n");
                 action = Integer.parseInt(sc.nextLine());
                 switch (action) {
                     case 1: {
@@ -126,11 +127,9 @@ public class StoreView {
             while (action != 3) {
                 productController.viewAllProducts();
                 System.out.println("********* ACTIONS *********");
-                System.out.println("""
-                        1. Add a product to cart
-                        2. View Cart
-                        3. Logout
-                        """);
+                System.out.println("1. Add a product to cart\n" +
+                                   "2. View Cart\n" +
+                                   "3. Logout\n");
                 action = Integer.parseInt(sc.nextLine());
                 switch (action) {
                     case 1: {
@@ -165,12 +164,10 @@ public class StoreView {
         while (action != 4) {
             cartController.viewAllCartItems(sessionUserID);
             System.out.println("********* ACTIONS *********");
-            System.out.println("""
-                        1. Update cart item quantity
-                        2. Remove a cart item
-                        3. Buy Now
-                        4. Go back
-                        """);
+            System.out.println("1. Update cart item quantity\n" +
+                               "2. Remove a cart item\n" +
+                               "3. Buy Now\n" +
+                               "4. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {
@@ -226,11 +223,9 @@ public class StoreView {
         while (action != 3) {
             userController.viewAllCustomers();
             System.out.println("********* ACTIONS *********");
-            System.out.println("""
-                    1. Add a new customer
-                    2. Remove a customer
-                    3. Go back
-                    """);
+            System.out.println("1. Add a new customer\n" +
+                               "2. Remove a customer\n" +
+                               "3. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {
@@ -270,14 +265,12 @@ public class StoreView {
         while (action != 6) {
             productController.viewAllProducts();
             System.out.println("********* ACTIONS *********");
-            System.out.println("""
-                    1. Add a new product
-                    2. Remove a product
-                    3. Change description of a product
-                    4. Change price of a product
-                    5. Change stock quantity of a product
-                    6. Go back
-                    """);
+            System.out.println("1. Add a new product\n" +
+                               "2. Remove a product\n" +
+                               "3. Change description of a product\n" +
+                               "4. Change price of a product\n" +
+                               "5. Change stock quantity of a product\n" +
+                               "6. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {

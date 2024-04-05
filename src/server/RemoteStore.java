@@ -1,5 +1,6 @@
 package server;
 
+import common.ServerDetails;
 import server.serviceImpls.CartServiceImpl;
 import server.serviceImpls.ProductServiceImpl;
 import server.serviceImpls.UserServiceImpl;
@@ -11,14 +12,18 @@ import java.rmi.Naming;
 
 public class RemoteStore {
     public static void main(String[] args) {
+        startServer();
+    }
+
+    public static void startServer() {
         try {
             UserService userService = new UserServiceImpl();
             ProductService productService = new ProductServiceImpl();
             CartService cartService = new CartServiceImpl();
 
-            Naming.rebind("store-user", userService);
-            Naming.rebind("store-product", productService);
-            Naming.rebind("store-cart", cartService);
+            Naming.rebind(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME, userService);
+            Naming.rebind(ServerDetails.SERVER_URL + ServerDetails.PRODUCT_STUB_NAME, productService);
+            Naming.rebind(ServerDetails.SERVER_URL + ServerDetails.CART_STUB_NAME, cartService);
             System.out.println("************** Server ready for online store **************");
         } catch (Exception e) {
             e.printStackTrace();
