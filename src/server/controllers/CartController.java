@@ -1,9 +1,11 @@
-package client.controllers;
+package server.controllers;
 
-import common.models.CartItem;
-import common.models.Product;
-import common.services.CartService;
-import common.services.ProductService;
+import server.models.CartItem;
+import server.models.Product;
+import server.serviceImpls.CartServiceImpl;
+import server.serviceImpls.ProductServiceImpl;
+import server.services.CartService;
+import server.services.ProductService;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -14,9 +16,9 @@ public class CartController {
     private final CartService cartService;
     private final ProductService productService;
 
-    public CartController(CartService cartService, ProductService productService) {
-        this.cartService = cartService;
-        this.productService = productService;
+    public CartController() {
+        this.cartService = new CartServiceImpl();
+        this.productService = new ProductServiceImpl();
     }
 
     public void addItemToCart(String userID, String productID, int qty) throws RemoteException {

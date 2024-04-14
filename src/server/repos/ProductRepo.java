@@ -1,6 +1,6 @@
 package server.repos;
 
-import common.models.Product;
+import server.models.Product;
 
 import java.util.Map;
 import java.util.UUID;

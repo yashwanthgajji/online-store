@@ -1,7 +1,8 @@
-package client.controllers;
+package server.controllers;
 
-import common.models.User;
-import common.services.UserService;
+import server.models.User;
+import server.serviceImpls.UserServiceImpl;
+import server.services.UserService;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -11,8 +12,8 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController() {
+        this.userService = new UserServiceImpl();
     }
 
     public String getUserName(String userID) throws RemoteException {

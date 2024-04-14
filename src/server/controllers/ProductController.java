@@ -1,7 +1,8 @@
-package client.controllers;
+package server.controllers;
 
-import common.models.Product;
-import common.services.ProductService;
+import server.models.Product;
+import server.serviceImpls.ProductServiceImpl;
+import server.services.ProductService;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -11,8 +12,8 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController() {
+        this.productService = new ProductServiceImpl();
     }
 
     public void viewAllProducts() throws RemoteException {

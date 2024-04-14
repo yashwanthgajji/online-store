@@ -1,6 +1,6 @@
 package server.repos;
 
-import common.models.CartItem;
+import server.models.CartItem;
 
 import java.util.Map;
 import java.util.UUID;

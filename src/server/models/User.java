@@ -1,4 +1,4 @@
-package common.models;
+package server.models;
 
 import common.enums.UserRole;
 

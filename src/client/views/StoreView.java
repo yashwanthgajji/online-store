@@ -1,12 +1,13 @@
 package client.views;
 
-import client.controllers.CartController;
-import client.controllers.ProductController;
-import client.controllers.UserController;
+import common.FrontController;
+import server.controllers.CartController;
+import server.controllers.ProductController;
+import server.controllers.UserController;
 import common.ServerDetails;
-import common.services.CartService;
-import common.services.ProductService;
-import common.services.UserService;
+import server.services.CartService;
+import server.services.ProductService;
+import server.services.UserService;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -23,21 +24,17 @@ public class StoreView {
     public static void main(String[] args) throws Exception {
 
         System.out.println("*** Connecting to Server ***");
-        UserService stubUser = null;
-        ProductService stubProduct = null;
-        CartService stubCart = null;
+        FrontController stubUser = null;
         try {
-            stubUser = (UserService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
-            stubProduct = (ProductService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.PRODUCT_STUB_NAME);
-            stubCart = (CartService) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.CART_STUB_NAME);
+            stubUser = (FrontController) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("*** Connection Successful");
 
-        userController = new UserController(stubUser);
-        productController = new ProductController(stubProduct);
-        cartController = new CartController(stubCart, stubProduct);
+        userController = new UserController();
+        productController = new ProductController();
+        cartController = new CartController();
 
         sc = new Scanner(System.in);
 

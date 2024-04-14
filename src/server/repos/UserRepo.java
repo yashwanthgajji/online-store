@@ -1,7 +1,7 @@
 package server.repos;
 
 import common.enums.UserRole;
-import common.models.User;
+import server.models.User;
 
 import java.util.Map;
 import java.util.UUID;

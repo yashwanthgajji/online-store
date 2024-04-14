@@ -1,4 +1,4 @@
-package common.models;
+package server.models;
 
 import java.io.Serializable;
 import java.util.UUID;
