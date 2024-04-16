@@ -1,6 +1,6 @@
 package server.serviceImpls;
 
-import common.enums.UserRole;
+import server.enums.UserRole;
 import server.models.User;
 import server.repos.UserRepo;
 import server.services.UserService;

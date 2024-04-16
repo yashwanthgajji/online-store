@@ -1,6 +1,6 @@
 package server.models;
 
-import common.enums.UserRole;
+import server.enums.UserRole;
 
 import java.io.Serializable;
 import java.util.UUID;

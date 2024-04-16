@@ -20,7 +20,7 @@ public class RemoteStore {
         try {
             FrontController frontController = new FrontControllerImpl();
 
-            Naming.rebind(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME, frontController);
+            Naming.rebind(ServerDetails.SERVER_URL + ServerDetails.YASH_STORE, frontController);
             System.out.println("************** Server ready for online store **************");
         } catch (Exception e) {
             e.printStackTrace();

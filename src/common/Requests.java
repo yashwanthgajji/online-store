@@ -1,4 +1,4 @@
-package common.enums;
+package common;
 
 public enum Requests {
     Get_UserName,
@@ -14,5 +14,10 @@ public enum Requests {
     Remove_Product,
     Update_Item_Description,
     Update_Item_Price,
-    Update_Item_Quantity
+    Update_Item_Quantity,
+    View_All_CartItems,
+    Add_Item_To_Cart,
+    Update_Item_Quantity_In_Cart,
+    Remove_Item_From_Cart,
+    Purchase
 }

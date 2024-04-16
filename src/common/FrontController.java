@@ -1,7 +1,5 @@
 package common;
 
-import common.enums.Requests;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

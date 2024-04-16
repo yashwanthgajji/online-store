@@ -47,10 +47,10 @@ public class CartController {
         cartService.removeItemFromCart(UUID.fromString(userID), UUID.fromString(cartItemID));
     }
 
-    public void viewAllCartItems(String userID) throws RemoteException {
+    public String viewAllCartItems(String userID) throws RemoteException {
         List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
-        System.out.println("********* CART *********");
         StringBuilder sb = new StringBuilder();
+        sb.append("********* CART *********");
         sb.append("S.NO")
                 .append("\t").append("CartItem ID")
                 .append("\t").append("Product Name")
@@ -70,16 +70,16 @@ public class CartController {
                     .append("\n");
             i++;
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 
-    public void purchase(String userID) throws RemoteException {
+    public String purchase(String userID) throws RemoteException {
         UUID uid = UUID.fromString(userID);
         List<CartItem> cartItems = cartService.getAllUserCartItems(uid);
         double totalPurchaseCost = 0;
-        System.out.println("********* RECEIPT *********");
-        System.out.println("Your order contains...");
         StringBuilder sb = new StringBuilder();
+        sb.append("********* RECEIPT *********\n");
+        sb.append("Your order contains...\n");
         sb.append("S.NO")
                 .append("\t").append("Product Name")
                 .append("\t").append("Description")
@@ -106,7 +106,7 @@ public class CartController {
                     .append("\n");
             i++;
         }
-        System.out.println(sb);
-        System.out.println("Total: " + totalPurchaseCost);
+        sb.append("Total: ").append(totalPurchaseCost).append("\n");
+        return sb.toString();
     }
 }

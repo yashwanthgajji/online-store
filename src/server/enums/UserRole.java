@@ -1,4 +1,4 @@
-package common.enums;
+package server.enums;
 
 import java.io.Serializable;
 

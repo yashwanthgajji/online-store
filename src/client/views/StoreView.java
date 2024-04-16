@@ -1,8 +1,7 @@
 package client.views;
 
 import common.FrontController;
-import common.enums.Requests;
-import server.controllers.CartController;
+import common.Requests;
 import common.ServerDetails;
 
 import java.rmi.Naming;
@@ -11,7 +10,6 @@ import java.util.Scanner;
 
 public class StoreView {
 
-    private static CartController cartController;
     private static String sessionUserID;
     private static FrontController frontController;
     private static Scanner sc;
@@ -20,13 +18,11 @@ public class StoreView {
 
         System.out.println("*** Connecting to Server ***");
         try {
-            frontController = (FrontController) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
+            frontController = (FrontController) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.YASH_STORE);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("*** Connection Successful");
-
-        cartController = new CartController();
 
         sc = new Scanner(System.in);
 
@@ -36,7 +32,7 @@ public class StoreView {
     private static void startView() throws Exception {
         System.out.println("********* WELCOME *********");
         System.out.println("1. Register\n" +
-                           "2. Login\n");
+                "2. Login\n");
         int regLog = Integer.parseInt(sc.nextLine());
         if (regLog == 1) {
             registrationPage();
@@ -87,9 +83,9 @@ public class StoreView {
             while (action != 4) {
                 System.out.println("********* ACTIONS *********");
                 System.out.println("1. View Products\n" +
-                                   "2. View Customers\n" +
-                                   "3. Add new Admin\n" +
-                                   "4. Logout\n");
+                        "2. View Customers\n" +
+                        "3. Add new Admin\n" +
+                        "4. Logout\n");
                 action = Integer.parseInt(sc.nextLine());
                 switch (action) {
                     case 1: {
@@ -115,15 +111,14 @@ public class StoreView {
                     }
                 }
             }
-        }
-        else {
+        } else {
             int action = -1;
             while (action != 3) {
                 frontController.handleRequest(Requests.View_All_Products, new String[0]);
                 System.out.println("********* ACTIONS *********");
                 System.out.println("1. Add a product to cart\n" +
-                                   "2. View Cart\n" +
-                                   "3. Logout\n");
+                        "2. View Cart\n" +
+                        "3. Logout\n");
                 action = Integer.parseInt(sc.nextLine());
                 switch (action) {
                     case 1: {
@@ -131,8 +126,8 @@ public class StoreView {
                         System.out.println("Enter product ID....");
                         String pid = sc.nextLine();
                         System.out.println("Enter quantity....");
-                        int qty = Integer.parseInt(sc.nextLine());
-                        cartController.addItemToCart(sessionUserID, pid, qty);
+                        String qty = sc.nextLine();
+                        frontController.handleRequest(Requests.Add_Item_To_Cart, new String[]{sessionUserID, pid, qty});
                         break;
                     }
                     case 2: {
@@ -156,12 +151,15 @@ public class StoreView {
     private static void customerCartPage() throws RemoteException {
         int action = -1;
         while (action != 4) {
-            cartController.viewAllCartItems(sessionUserID);
+            System.out.println(frontController.handleRequest(
+                    Requests.View_All_CartItems,
+                    new String[]{sessionUserID}
+            ));
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Update cart item quantity\n" +
-                               "2. Remove a cart item\n" +
-                               "3. Buy Now\n" +
-                               "4. Go back\n");
+                    "2. Remove a cart item\n" +
+                    "3. Buy Now\n" +
+                    "4. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {
@@ -169,21 +167,27 @@ public class StoreView {
                     System.out.println("Enter cart item ID to update....");
                     String cid = sc.nextLine();
                     System.out.println("Enter quantity....");
-                    int qty = Integer.parseInt(sc.nextLine());
-                    cartController.updateItemQuantityInCart(sessionUserID, cid, qty);
+                    String qty = sc.nextLine();
+                    frontController.handleRequest(
+                            Requests.Update_Item_Quantity_In_Cart,
+                            new String[]{sessionUserID, cid, qty}
+                    );
                     break;
                 }
                 case 2: {
                     System.out.println("********* REMOVE PRODUCT IN CART *********");
                     System.out.println("Enter cart item ID to update....");
                     String cid = sc.nextLine();
-                    cartController.removeItemFromCart(sessionUserID, cid);
+                    frontController.handleRequest(
+                            Requests.Remove_Item_From_Cart,
+                            new String[]{sessionUserID, cid}
+                    );
                     break;
                 }
                 case 3: {
                     System.out.println("********* ORDER *********");
                     System.out.println("Placing order...");
-                    cartController.purchase(sessionUserID);
+                    System.out.println(frontController.handleRequest(Requests.Purchase, new String[]{sessionUserID}));
                     System.out.println("********* ORDER PLACED SUCCESSFULLY *********");
                     break;
                 }
@@ -219,8 +223,8 @@ public class StoreView {
             System.out.println(frontController.handleRequest(Requests.View_All_Customers, new String[0]));
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Add a new customer\n" +
-                               "2. Remove a customer\n" +
-                               "3. Go back\n");
+                    "2. Remove a customer\n" +
+                    "3. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {
@@ -262,11 +266,11 @@ public class StoreView {
             frontController.handleRequest(Requests.View_All_Products, new String[0]);
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Add a new product\n" +
-                               "2. Remove a product\n" +
-                               "3. Change description of a product\n" +
-                               "4. Change price of a product\n" +
-                               "5. Change stock quantity of a product\n" +
-                               "6. Go back\n");
+                    "2. Remove a product\n" +
+                    "3. Change description of a product\n" +
+                    "4. Change price of a product\n" +
+                    "5. Change stock quantity of a product\n" +
+                    "6. Go back\n");
             action = Integer.parseInt(sc.nextLine());
             switch (action) {
                 case 1: {
