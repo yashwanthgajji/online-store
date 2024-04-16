@@ -7,7 +7,6 @@ import server.serviceImpls.ProductServiceImpl;
 import server.services.CartService;
 import server.services.ProductService;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +20,7 @@ public class CartController {
         this.productService = new ProductServiceImpl();
     }
 
-    public void addItemToCart(String userID, String productID, int qty) throws RemoteException {
+    public void addItemToCart(String userID, String productID, int qty) {
         Product product = productService.getProduct(UUID.fromString(productID));
         if (product.getQuantityAvailable() >=  qty) {
             CartItem cartItem = new CartItem(UUID.fromString(productID), qty);
@@ -31,7 +30,7 @@ public class CartController {
         }
     }
 
-    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) throws RemoteException {
+    public void updateItemQuantityInCart(String userID, String cartItemID, int qty) {
         UUID uid = UUID.fromString(userID);
         UUID cid = UUID.fromString(cartItemID);
         CartItem cartItem = cartService.getCartItem(uid, cid);
@@ -43,11 +42,11 @@ public class CartController {
         }
     }
 
-    public void removeItemFromCart(String userID, String cartItemID) throws RemoteException {
+    public void removeItemFromCart(String userID, String cartItemID) {
         cartService.removeItemFromCart(UUID.fromString(userID), UUID.fromString(cartItemID));
     }
 
-    public String viewAllCartItems(String userID) throws RemoteException {
+    public String viewAllCartItems(String userID) {
         List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
         StringBuilder sb = new StringBuilder();
         sb.append("********* CART *********\n");
@@ -73,7 +72,7 @@ public class CartController {
         return sb.toString();
     }
 
-    public String purchase(String userID) throws RemoteException {
+    public String purchase(String userID) {
         UUID uid = UUID.fromString(userID);
         List<CartItem> cartItems = cartService.getAllUserCartItems(uid);
         double totalPurchaseCost = 0;

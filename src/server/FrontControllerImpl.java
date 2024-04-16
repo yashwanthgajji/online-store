@@ -27,6 +27,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
         switch (request) {
             case Get_UserName -> res = userController.getUserName(args[0]);
             case Register_New_Customer -> res = userController.registerNewCustomer(args[0], args[1], args[2]);
+            case Login -> res = userController.login(args[0], args[1]);
             case IsUserAdmin -> res = String.valueOf(userController.isUserAdmin(args[0]));
             case Add_New_Admin -> {
                 userController.addNewAdmin(args[0], args[1], args[2]);
