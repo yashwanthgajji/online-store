@@ -1,13 +1,9 @@
 package client.views;
 
 import common.FrontController;
+import common.enums.Requests;
 import server.controllers.CartController;
-import server.controllers.ProductController;
-import server.controllers.UserController;
 import common.ServerDetails;
-import server.services.CartService;
-import server.services.ProductService;
-import server.services.UserService;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -15,25 +11,21 @@ import java.util.Scanner;
 
 public class StoreView {
 
-    private static UserController userController;
-    private static ProductController productController;
     private static CartController cartController;
     private static String sessionUserID;
+    private static FrontController frontController;
     private static Scanner sc;
 
     public static void main(String[] args) throws Exception {
 
         System.out.println("*** Connecting to Server ***");
-        FrontController stubUser = null;
         try {
-            stubUser = (FrontController) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
+            frontController = (FrontController) Naming.lookup(ServerDetails.SERVER_URL + ServerDetails.USER_STUB_NAME);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("*** Connection Successful");
 
-        userController = new UserController();
-        productController = new ProductController();
         cartController = new CartController();
 
         sc = new Scanner(System.in);
@@ -52,7 +44,10 @@ public class StoreView {
             loginPage();
         }
         if (sessionUserID != null) {
-            System.out.println("Welcome " + userController.getUserName(sessionUserID));
+            String[] args = new String[1];
+            args[0] = sessionUserID;
+            String userName = frontController.handleRequest(Requests.Get_UserName, args);
+            System.out.println("Welcome " + userName);
             startDashboard();
         } else {
             System.out.println("Registration/Login unsuccessful");
@@ -61,31 +56,33 @@ public class StoreView {
 
     private static void registrationPage() throws RemoteException {
         System.out.println("********* REGISTRATION *********");
+        String[] regArgs = new String[3];
         System.out.println("Enter Name....");
-        String name = sc.nextLine();
+        regArgs[0] = sc.nextLine();
         System.out.println("Enter Email....");
-        String email = sc.nextLine();
+        regArgs[1] = sc.nextLine();
         System.out.println("Enter Password....");
-        String password = sc.nextLine();
+        regArgs[2] = sc.nextLine();
         System.out.println("Registering user....");
-        sessionUserID = userController.registerNewCustomer(name, email, password);
+        sessionUserID = frontController.handleRequest(Requests.Register_New_Customer, regArgs);
         System.out.println("Registration Successful");
     }
 
     private static void loginPage() throws RemoteException {
         System.out.println("********* LOGIN *********");
+        String[] logArgs = new String[2];
         System.out.println("Enter Email....");
-        String email = sc.nextLine();
+        logArgs[0] = sc.nextLine();
         System.out.println("Enter Password....");
-        String password = sc.nextLine();
+        logArgs[1] = sc.nextLine();
         System.out.println("Authenticating user....");
-        sessionUserID = userController.login(email, password);
+        sessionUserID = frontController.handleRequest(Requests.Login, logArgs);
         System.out.println("Login Successful....");
     }
 
     private static void startDashboard() throws RemoteException {
         System.out.println("********* DASHBOARD *********");
-        if (userController.isUserAdmin(sessionUserID)) {
+        if (Boolean.parseBoolean(frontController.handleRequest(Requests.IsUserAdmin, new String[]{sessionUserID}))) {
             int action = -1;
             while (action != 4) {
                 System.out.println("********* ACTIONS *********");
@@ -122,7 +119,7 @@ public class StoreView {
         else {
             int action = -1;
             while (action != 3) {
-                productController.viewAllProducts();
+                frontController.handleRequest(Requests.View_All_Products, new String[0]);
                 System.out.println("********* ACTIONS *********");
                 System.out.println("1. Add a product to cart\n" +
                                    "2. View Cart\n" +
@@ -204,21 +201,22 @@ public class StoreView {
 
     private static void registerAdminPage() throws RemoteException {
         System.out.println("********* ADMIN REGISTRATION *********");
+        String[] regArgs = new String[3];
         System.out.println("Enter Name....");
-        String name = sc.nextLine();
+        regArgs[0] = sc.nextLine();
         System.out.println("Enter Email....");
-        String email = sc.nextLine();
+        regArgs[1] = sc.nextLine();
         System.out.println("Enter Password....");
-        String password = sc.nextLine();
+        regArgs[2] = sc.nextLine();
         System.out.println("Registering admin....");
-        userController.addNewAdmin(name, email, password);
+        frontController.handleRequest(Requests.Add_New_Admin, regArgs);
         System.out.println("Admin Registration Successful");
     }
 
     private static void adminCustomersPage() throws RemoteException {
         int action = -1;
         while (action != 3) {
-            userController.viewAllCustomers();
+            System.out.println(frontController.handleRequest(Requests.View_All_Customers, new String[0]));
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Add a new customer\n" +
                                "2. Remove a customer\n" +
@@ -227,22 +225,23 @@ public class StoreView {
             switch (action) {
                 case 1: {
                     System.out.println("********* ADD NEW CUSTOMER *********");
+                    String[] custArgs = new String[3];
                     System.out.println("Enter name....");
-                    String name = sc.nextLine();
+                    custArgs[0] = sc.nextLine();
                     System.out.println("Enter email....");
-                    String email = sc.nextLine();
+                    custArgs[1] = sc.nextLine();
                     System.out.println("Enter password....");
-                    String pass = sc.nextLine();
-                    System.out.println("Adding item to database....");
-                    userController.addNewCustomer(name, email, pass);
-                    System.out.println("Item added successfully....");
+                    custArgs[2] = sc.nextLine();
+                    System.out.println("Adding customer to database....");
+                    frontController.handleRequest(Requests.Add_New_Customer, custArgs);
+                    System.out.println("Customer added successfully....");
                     break;
                 }
                 case 2: {
                     System.out.println("********* REMOVE CUSTOMER *********");
                     System.out.println("Enter customer ID");
                     String cid = sc.nextLine();
-                    userController.removeCustomer(cid);
+                    frontController.handleRequest(Requests.Remove_Customer, new String[]{cid});
                     break;
                 }
                 case 3: {
@@ -260,7 +259,7 @@ public class StoreView {
     private static void adminProductsPage() throws RemoteException {
         int action = -1;
         while (action != 6) {
-            productController.viewAllProducts();
+            frontController.handleRequest(Requests.View_All_Products, new String[0]);
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Add a new product\n" +
                                "2. Remove a product\n" +
@@ -272,16 +271,17 @@ public class StoreView {
             switch (action) {
                 case 1: {
                     System.out.println("********* ADD NEW ITEM *********");
+                    String[] args = new String[4];
                     System.out.println("Enter name....");
-                    String name = sc.nextLine();
+                    args[0] = sc.nextLine();
                     System.out.println("Enter description....");
-                    String desc = sc.nextLine();
+                    args[1] = sc.nextLine();
                     System.out.println("Enter price....");
-                    double price = Double.parseDouble(sc.nextLine());
+                    args[2] = sc.nextLine();
                     System.out.println("Enter quantity....");
-                    int qty = Integer.parseInt(sc.nextLine());
+                    args[3] = sc.nextLine();
                     System.out.println("Adding item to database....");
-                    productController.addNewProduct(name, desc, price, qty);
+                    frontController.handleRequest(Requests.Add_New_Product, args);
                     System.out.println("Item added successfully....");
                     break;
                 }
@@ -289,7 +289,7 @@ public class StoreView {
                     System.out.println("********* REMOVE ITEM *********");
                     System.out.println("Enter productID");
                     String pid = sc.nextLine();
-                    productController.removeProduct(pid);
+                    frontController.handleRequest(Requests.Remove_Product, new String[]{pid});
                     break;
                 }
                 case 3: {
@@ -298,7 +298,7 @@ public class StoreView {
                     String pid = sc.nextLine();
                     System.out.println("Enter new description for the product");
                     String newDesc = sc.nextLine();
-                    productController.updateItemDescription(pid, newDesc);
+                    frontController.handleRequest(Requests.Update_Item_Description, new String[]{pid, newDesc});
                     break;
                 }
                 case 4: {
@@ -306,8 +306,8 @@ public class StoreView {
                     System.out.println("Enter productID you want to update");
                     String pid = sc.nextLine();
                     System.out.println("Enter new price for the product");
-                    double newPrice = Double.parseDouble(sc.nextLine());
-                    productController.updateItemPrice(pid, newPrice);
+                    String newPrice = sc.nextLine();
+                    frontController.handleRequest(Requests.Update_Item_Price, new String[]{pid, newPrice});
                     break;
                 }
                 case 5: {
@@ -315,8 +315,8 @@ public class StoreView {
                     System.out.println("Enter productID you want to update");
                     String pid = sc.nextLine();
                     System.out.println("Enter new quantity for the product");
-                    int newQty = Integer.parseInt(sc.nextLine());
-                    productController.updateItemQuantity(pid, newQty);
+                    String newQty = sc.nextLine();
+                    frontController.handleRequest(Requests.Update_Item_Quantity, new String[]{pid, newQty});
                     break;
                 }
                 case 6: {

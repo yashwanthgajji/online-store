@@ -16,10 +16,10 @@ public class ProductController {
         this.productService = new ProductServiceImpl();
     }
 
-    public void viewAllProducts() throws RemoteException {
+    public String viewAllProducts() throws RemoteException {
         List<Product> products = productService.getAllProducts();
-        System.out.println("********* PRODUCTS *********");
         StringBuilder sb = new StringBuilder();
+        sb.append("********* PRODUCTS *********");
         sb.append("S.NO")
                 .append("\t").append("Product ID")
                 .append("\t").append("Product Name")
@@ -38,7 +38,7 @@ public class ProductController {
                     .append("\n");
             i++;
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 
     public void addNewProduct(String name, String desc, double price, int qty) throws RemoteException {

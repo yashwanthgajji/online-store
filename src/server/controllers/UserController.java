@@ -39,10 +39,10 @@ public class UserController {
         userService.addNewAdmin(admin);
     }
 
-    public void viewAllCustomers() throws RemoteException {
+    public String viewAllCustomers() throws RemoteException {
         List<User> customers = userService.getAllCustomers();
-        System.out.println("********* CUSTOMERS *********");
         StringBuilder sb = new StringBuilder();
+        sb.append("********* CUSTOMERS *********\n");
         sb.append("S.NO")
                 .append("\t").append("Customer ID")
                 .append("\t").append("Customer Name")
@@ -57,7 +57,7 @@ public class UserController {
                     .append("\n");
             i++;
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 
     public void addNewCustomer(String name, String email, String password) throws RemoteException {
