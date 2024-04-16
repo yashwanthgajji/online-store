@@ -114,7 +114,7 @@ public class StoreView {
         } else {
             int action = -1;
             while (action != 3) {
-                frontController.handleRequest(Requests.View_All_Products, new String[0]);
+                System.out.println(frontController.handleRequest(Requests.View_All_Products, new String[0]));
                 System.out.println("********* ACTIONS *********");
                 System.out.println("1. Add a product to cart\n" +
                         "2. View Cart\n" +
@@ -263,7 +263,7 @@ public class StoreView {
     private static void adminProductsPage() throws RemoteException {
         int action = -1;
         while (action != 6) {
-            frontController.handleRequest(Requests.View_All_Products, new String[0]);
+            System.out.println(frontController.handleRequest(Requests.View_All_Products, new String[0]));
             System.out.println("********* ACTIONS *********");
             System.out.println("1. Add a new product\n" +
                     "2. Remove a product\n" +

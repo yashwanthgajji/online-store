@@ -19,7 +19,7 @@ public class ProductController {
     public String viewAllProducts() throws RemoteException {
         List<Product> products = productService.getAllProducts();
         StringBuilder sb = new StringBuilder();
-        sb.append("********* PRODUCTS *********");
+        sb.append("********* PRODUCTS *********\n");
         sb.append("S.NO")
                 .append("\t").append("Product ID")
                 .append("\t").append("Product Name")

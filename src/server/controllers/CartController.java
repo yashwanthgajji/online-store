@@ -50,7 +50,7 @@ public class CartController {
     public String viewAllCartItems(String userID) throws RemoteException {
         List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(userID));
         StringBuilder sb = new StringBuilder();
-        sb.append("********* CART *********");
+        sb.append("********* CART *********\n");
         sb.append("S.NO")
                 .append("\t").append("CartItem ID")
                 .append("\t").append("Product Name")
