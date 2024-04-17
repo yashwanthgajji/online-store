@@ -5,6 +5,7 @@ public enum Requests {
     Register_New_Customer,
     Login,
     IsUserAdmin,
+    Get_User_Role,
     Add_New_Admin,
     View_All_Customers,
     Add_New_Customer,

@@ -6,21 +6,21 @@ import server.auth.AuthorizationService;
 import server.auth.HTTPMethod;
 import server.auth.ServicePoint;
 import server.auth.UserRole;
-import server.controllers.CartController;
-import server.controllers.ProductController;
-import server.controllers.UserController;
+import server.controllers.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class FrontControllerImpl extends UnicastRemoteObject implements FrontController {
 
+    private final MainController authenticationController;
     private final UserController userController;
     private final ProductController productController;
     private final CartController cartController;
     private final AuthorizationService authorizationService;
 
     protected FrontControllerImpl() throws RemoteException {
+        authenticationController = ControllerFactory.createController(ControllerType.AuthenticationController);
         userController = new UserController();
         productController = new ProductController();
         cartController = new CartController();
@@ -32,13 +32,13 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
         String res = "Unknown Request";
         switch (request) {
             //User Requests
-            case Get_UserName -> res = userController.getUserName(args[0]);
-            case Register_New_Customer -> res = userController.registerNewCustomer(args[0], args[1], args[2]);
-            case Login -> res = userController.login(args[0], args[1]);
+            case Get_UserName -> res = (String) userController.handleRequest(Requests.Get_UserName, args);
+            case Register_New_Customer -> res = (String) authenticationController.handleRequest(Requests.Register_New_Customer, args);
+            case Login -> res = (String) authenticationController.handleRequest(Requests.Login, args);
             case IsUserAdmin -> res = String.valueOf(userController.getUserRole(args[0]) == UserRole.ADMIN);
             case Add_New_Admin -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
                         HTTPMethod.PUT
                 )) {
