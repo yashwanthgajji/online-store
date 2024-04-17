@@ -1,4 +1,4 @@
-package server.enums;
+package server.auth;
 
 import java.io.Serializable;
 

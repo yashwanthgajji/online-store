@@ -1,5 +1,6 @@
 package server.controllers;
 
+import server.auth.UserRole;
 import server.models.User;
 import server.serviceImpls.UserServiceImpl;
 import server.services.UserService;
@@ -29,8 +30,8 @@ public class UserController {
         return userService.login(email, password).toString();
     }
 
-    public boolean isUserAdmin(String userID) {
-        return userService.isUserAdmin(UUID.fromString(userID));
+    public UserRole getUserRole(String userID) {
+        return userService.getUserRole(UUID.fromString(userID));
     }
 
     public void addNewAdmin(String name, String email, String password) {

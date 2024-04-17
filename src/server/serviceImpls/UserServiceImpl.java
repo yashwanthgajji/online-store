@@ -1,6 +1,6 @@
 package server.serviceImpls;
 
-import server.enums.UserRole;
+import server.auth.UserRole;
 import server.models.User;
 import server.repos.UserRepo;
 import server.services.UserService;
@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserAdmin(UUID userID) {
-        return userRepo.getUserByID(userID).getRole() == UserRole.ADMIN;
+    public UserRole getUserRole(UUID userID) {
+        return userRepo.getUserByID(userID).getRole();
     }
 
     @Override
