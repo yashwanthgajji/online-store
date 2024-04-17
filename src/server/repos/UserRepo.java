@@ -1,6 +1,6 @@
 package server.repos;
 
-import server.enums.UserRole;
+import server.auth.UserRole;
 import server.models.User;
 
 import java.util.Map;

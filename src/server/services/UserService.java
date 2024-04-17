@@ -1,5 +1,6 @@
 package server.services;
 
+import server.auth.UserRole;
 import server.models.User;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface UserService {
     public void addNewAdmin(User user);
     public void addNewCustomer(User user);
     public void removeCustomer(UUID userID);
-    public boolean isUserAdmin(UUID userID);
+    public UserRole getUserRole(UUID userID);
     public List<User> getAllCustomers();
     public String getUserName(UUID userID);
 }
