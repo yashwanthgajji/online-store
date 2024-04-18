@@ -1,5 +1,6 @@
 package server.controllers;
 
 public enum ControllerType {
-    AuthenticationController
+    AuthenticationController,
+    UserController
 }

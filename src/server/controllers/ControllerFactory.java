@@ -6,6 +6,9 @@ public class ControllerFactory {
             case AuthenticationController -> {
                 return new AuthenticationController();
             }
+            case UserController -> {
+                return new UserController();
+            }
         }
         return null;
     }

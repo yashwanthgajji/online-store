@@ -14,14 +14,14 @@ import java.rmi.server.UnicastRemoteObject;
 public class FrontControllerImpl extends UnicastRemoteObject implements FrontController {
 
     private final MainController authenticationController;
-    private final UserController userController;
+    private final MainController userController;
     private final ProductController productController;
     private final CartController cartController;
     private final AuthorizationService authorizationService;
 
     protected FrontControllerImpl() throws RemoteException {
         authenticationController = ControllerFactory.createController(ControllerType.AuthenticationController);
-        userController = new UserController();
+        userController = ControllerFactory.createController(ControllerType.UserController);
         productController = new ProductController();
         cartController = new CartController();
         authorizationService = new AuthorizationService();
@@ -35,14 +35,17 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             case Get_UserName -> res = (String) userController.handleRequest(Requests.Get_UserName, args);
             case Register_New_Customer -> res = (String) authenticationController.handleRequest(Requests.Register_New_Customer, args);
             case Login -> res = (String) authenticationController.handleRequest(Requests.Login, args);
-            case IsUserAdmin -> res = String.valueOf(userController.getUserRole(args[0]) == UserRole.ADMIN);
+            case IsUserAdmin -> {
+                UserRole userRole = (UserRole) userController.handleRequest(Requests.Get_User_Role, args);
+                res = String.valueOf(userRole == UserRole.ADMIN);
+            }
             case Add_New_Admin -> {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
                         HTTPMethod.PUT
                 )) {
-                    userController.addNewAdmin(args[1], args[2], args[3]);
+                    userController.handleRequest(Requests.Add_New_Admin, new String[]{args[1], args[2], args[3]});
                     res = null;
                 } else {
                     res = "Unauthorized Request";
@@ -50,22 +53,22 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case View_All_Customers -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
                         HTTPMethod.GET
                 )) {
-                    res = userController.viewAllCustomers();
+                    res = (String) userController.handleRequest(Requests.View_All_Customers, new String[0]);
                 } else {
                     res = "Unauthorized Request";
                 }
             }
             case Add_New_Customer -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
                         HTTPMethod.PUT
                 )) {
-                    userController.addNewCustomer(args[1], args[2], args[3]);
+                    userController.handleRequest(Requests.Add_New_Customer, new String[]{args[1], args[2], args[3]});
                     res = null;
                 } else {
                     res = "Unauthorized Request";
@@ -73,11 +76,11 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Remove_Customer -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
                         HTTPMethod.DELETE
                 )) {
-                    userController.removeCustomer(args[1]);
+                    userController.handleRequest(Requests.Remove_Customer, new String[]{args[1]});
                     res = null;
                 } else {
                     res = "Unauthorized Request";
@@ -86,7 +89,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             //Product Requests
             case View_All_Products -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.GET
                 )) {
@@ -97,7 +100,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Add_New_Product -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
@@ -113,7 +116,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Remove_Product -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.DELETE
                 )) {
@@ -124,7 +127,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Update_Item_Description -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
@@ -135,7 +138,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Update_Item_Price -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
@@ -146,7 +149,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Update_Item_Quantity -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
@@ -158,7 +161,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             //Cart Requests
             case View_All_CartItems -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
                         HTTPMethod.GET
                 )) {
@@ -167,7 +170,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Add_Item_To_Cart -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
@@ -176,7 +179,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Update_Item_Quantity_In_Cart -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
@@ -185,7 +188,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Remove_Item_From_Cart -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
                         HTTPMethod.DELETE
                 )) {
@@ -194,7 +197,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
             }
             case Purchase -> {
                 if (authorizationService.isAuthorized(
-                        userController.getUserRole(args[0]),
+                        (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
