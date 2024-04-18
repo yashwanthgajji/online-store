@@ -9,6 +9,12 @@ public class ControllerFactory {
             case UserController -> {
                 return new UserController();
             }
+            case ProductController -> {
+                return new ProductController();
+            }
+            case CartController -> {
+                return new CartController();
+            }
         }
         return null;
     }

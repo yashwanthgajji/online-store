@@ -6,7 +6,9 @@ import server.auth.AuthorizationService;
 import server.auth.HTTPMethod;
 import server.auth.ServicePoint;
 import server.auth.UserRole;
-import server.controllers.*;
+import server.controllers.ControllerFactory;
+import server.controllers.ControllerType;
+import server.controllers.MainController;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -15,15 +17,15 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
 
     private final MainController authenticationController;
     private final MainController userController;
-    private final ProductController productController;
-    private final CartController cartController;
+    private final MainController productController;
+    private final MainController cartController;
     private final AuthorizationService authorizationService;
 
     protected FrontControllerImpl() throws RemoteException {
         authenticationController = ControllerFactory.createController(ControllerType.AuthenticationController);
         userController = ControllerFactory.createController(ControllerType.UserController);
-        productController = new ProductController();
-        cartController = new CartController();
+        productController = ControllerFactory.createController(ControllerType.ProductController);
+        cartController = ControllerFactory.createController(ControllerType.CartController);
         authorizationService = new AuthorizationService();
     }
 
@@ -93,7 +95,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.GET
                 )) {
-                    res = productController.viewAllProducts();
+                    res = (String) productController.handleRequest(Requests.View_All_Products, new String[0]);
                 } else {
                     res = "Unauthorized Request";
                 }
@@ -104,11 +106,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
-                    productController.addNewProduct(
-                            args[1],
-                            args[2],
-                            Double.parseDouble(args[3]),
-                            Integer.parseInt(args[4])
+                    productController.handleRequest(
+                            Requests.Add_New_Product,
+                            new String[]{args[1], args[2], args[3], args[4]}
                     );
                 } else {
                     res = "Unauthorized Request";
@@ -120,7 +120,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.DELETE
                 )) {
-                    productController.removeProduct(args[1]);
+                    productController.handleRequest(Requests.Remove_Product, new String[]{args[1]});
                 } else {
                     res = "Unauthorized Request";
                 }
@@ -131,7 +131,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
-                    productController.updateItemDescription(args[1], args[2]);
+                    productController.handleRequest(Requests.Update_Item_Description, new String[]{args[1], args[2]});
                 } else {
                     res = "Unauthorized Request";
                 }
@@ -142,7 +142,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
-                    productController.updateItemPrice(args[1], Double.parseDouble(args[2]));
+                    productController.handleRequest(Requests.Update_Item_Price, new String[]{args[1], args[2]});
                 } else {
                     res = "Unauthorized Request";
                 }
@@ -153,7 +153,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.PRODUCT,
                         HTTPMethod.PUT
                 )) {
-                    productController.updateItemQuantity(args[1], Integer.parseInt(args[2]));
+                    productController.handleRequest(Requests.Update_Item_Quantity, new String[]{args[1], args[2]});
                 } else {
                     res = "Unauthorized Request";
                 }
@@ -165,7 +165,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.GET
                 )) {
-                    res = cartController.viewAllCartItems(args[0]);
+                    res = (String) cartController.handleRequest(Requests.View_All_CartItems, args);
                 }
             }
             case Add_Item_To_Cart -> {
@@ -174,7 +174,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
-                    cartController.addItemToCart(args[0], args[1], Integer.parseInt(args[2]));
+                    cartController.handleRequest(Requests.Add_Item_To_Cart, args);
                 }
             }
             case Update_Item_Quantity_In_Cart -> {
@@ -183,7 +183,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
-                    cartController.updateItemQuantityInCart(args[0], args[1], Integer.parseInt(args[2]));
+                    cartController.handleRequest(Requests.Update_Item_Quantity_In_Cart ,args);
                 }
             }
             case Remove_Item_From_Cart -> {
@@ -192,7 +192,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.DELETE
                 )) {
-                    cartController.removeItemFromCart(args[0], args[1]);
+                    cartController.handleRequest(Requests.Remove_Item_From_Cart, args);
                 }
             }
             case Purchase -> {
@@ -201,7 +201,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
-                    res = cartController.purchase(args[0]);
+                    res = (String) cartController.handleRequest(Requests.Purchase, args);
                 }
             }
         }

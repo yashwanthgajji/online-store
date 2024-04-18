@@ -2,5 +2,7 @@ package server.controllers;
 
 public enum ControllerType {
     AuthenticationController,
-    UserController
+    UserController,
+    ProductController,
+    CartController
 }
