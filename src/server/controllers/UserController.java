@@ -1,6 +1,6 @@
 package server.controllers;
 
-import server.auth.UserRole;
+import common.Requests;
 import server.models.User;
 import server.serviceImpls.UserServiceImpl;
 import server.services.UserService;
@@ -8,7 +8,7 @@ import server.services.UserService;
 import java.util.List;
 import java.util.UUID;
 
-public class UserController {
+public class UserController implements MainController {
 
     private final UserService userService;
 
@@ -16,57 +16,47 @@ public class UserController {
         this.userService = new UserServiceImpl();
     }
 
-    public String getUserName(String userID) {
-        return userService.getUserName(UUID.fromString(userID));
-    }
-
-    public String registerNewCustomer(String name, String email, String password) {
-        User user = new User(name, email, password);
-        userService.registerNewCustomer(user);
-        return user.getUserID().toString();
-    }
-
-    public String login(String email, String password) {
-        return userService.login(email, password).toString();
-    }
-
-    public UserRole getUserRole(String userID) {
-        return userService.getUserRole(UUID.fromString(userID));
-    }
-
-    public void addNewAdmin(String name, String email, String password) {
-        User admin = new User(name, email, password);
-        userService.addNewAdmin(admin);
-    }
-
-    public String viewAllCustomers() {
-        List<User> customers = userService.getAllCustomers();
-        StringBuilder sb = new StringBuilder();
-        sb.append("********* CUSTOMERS *********\n");
-        sb.append("S.NO")
-                .append("\t").append("Customer ID")
-                .append("\t").append("Customer Name")
-                .append("\t").append("Email")
-                .append("\n");
-        int i=1;
-        for (User customer : customers) {
-            sb.append(i)
-                    .append("\t").append(customer.getUserID())
-                    .append("\t").append(customer.getName())
-                    .append("\t").append(customer.getEmail())
-                    .append("\n");
-            i++;
+    @Override
+    public Object handleRequest(Requests request, String[] args) {
+        switch (request) {
+            case Get_UserName -> {
+                return userService.getUserName(UUID.fromString(args[0]));
+            }
+            case Get_User_Role -> {
+                return userService.getUserRole(UUID.fromString(args[0]));
+            }
+            case Add_New_Admin -> {
+                User admin = new User(args[0], args[1], args[2]);
+                userService.addNewAdmin(admin);
+            }
+            case View_All_Customers -> {
+                List<User> customers = userService.getAllCustomers();
+                StringBuilder sb = new StringBuilder();
+                sb.append("********* CUSTOMERS *********\n");
+                sb.append("S.NO")
+                        .append("\t").append("Customer ID")
+                        .append("\t").append("Customer Name")
+                        .append("\t").append("Email")
+                        .append("\n");
+                int i=1;
+                for (User customer : customers) {
+                    sb.append(i)
+                            .append("\t").append(customer.getUserID())
+                            .append("\t").append(customer.getName())
+                            .append("\t").append(customer.getEmail())
+                            .append("\n");
+                    i++;
+                }
+                return sb.toString();
+            }
+            case Requests.Add_New_Customer -> {
+                User customer = new User(args[0], args[1], args[2]);
+                userService.addNewCustomer(customer);
+            }
+            case Requests.Remove_Customer -> {
+                userService.removeCustomer(UUID.fromString(args[0]));
+            }
         }
-        return sb.toString();
-    }
-
-    public void addNewCustomer(String name, String email, String password) {
-        User customer = new User(name, email, password);
-        userService.addNewCustomer(customer);
-    }
-
-
-    public void removeCustomer(String userID) {
-        userService.removeCustomer(UUID.fromString(userID));
+        return null;
     }
 }

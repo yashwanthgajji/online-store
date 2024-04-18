@@ -1,7 +1,7 @@
 compile:
 	@echo "Compiling all Java files..."
 	@javac server/RemoteStore.java
-	@javac client/StoreView.java
+	@javac client/ClientStore.java
 	@echo "Done compiling..."
 clean:
 	@echo "Removing .class files..."
