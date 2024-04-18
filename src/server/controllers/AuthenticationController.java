@@ -5,6 +5,8 @@ import server.models.User;
 import server.serviceImpls.UserServiceImpl;
 import server.services.UserService;
 
+import java.util.UUID;
+
 public class AuthenticationController implements MainController {
     private final UserService userService;
 
@@ -18,10 +20,15 @@ public class AuthenticationController implements MainController {
             case Register_New_Customer -> {
                 User user = new User(args[0], args[1], args[2]);
                 userService.registerNewCustomer(user);
-                return user.getUserID().toString();
+                res = "Registration Successful...";
             }
             case Login -> {
-                return userService.login(args[0], args[1]).toString();
+                UUID userID = userService.login(args[0], args[1]);
+                if (userID ==  null) {
+                    res = "Invalid Username/Password";
+                } else {
+                    res = userID.toString();
+                }
             }
         }
         return res;

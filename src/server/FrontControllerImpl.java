@@ -174,7 +174,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
-                    cartController.handleRequest(Requests.Add_Item_To_Cart, args);
+                    res = (String) cartController.handleRequest(Requests.Add_Item_To_Cart, args);
                 }
             }
             case Update_Item_Quantity_In_Cart -> {
@@ -183,7 +183,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                         ServicePoint.CART,
                         HTTPMethod.PUT
                 )) {
-                    cartController.handleRequest(Requests.Update_Item_Quantity_In_Cart ,args);
+                    res = (String) cartController.handleRequest(Requests.Update_Item_Quantity_In_Cart ,args);
                 }
             }
             case Remove_Item_From_Cart -> {
