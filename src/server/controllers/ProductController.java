@@ -19,7 +19,7 @@ public class ProductController implements MainController {
     @Override
     public Object handleRequest(Requests request, String[] args) {
         switch (request) {
-            case View_All_Products -> {
+            case View_All_Products: {
                 List<Product> products = productService.getAllProducts();
                 StringBuilder sb = new StringBuilder();
                 sb.append("********* PRODUCTS *********\n");
@@ -43,21 +43,26 @@ public class ProductController implements MainController {
                 }
                 return sb.toString();
             }
-            case Add_New_Product -> {
+            case Add_New_Product: {
                 Product product = new Product(args[0], args[1], Double.parseDouble(args[2]), Integer.parseInt(args[3]));
                 productService.addNewProduct(product);
+                break;
             }
-            case Remove_Product -> {
+            case Remove_Product: {
                 productService.removeProduct(UUID.fromString(args[0]));
+                break;
             }
-            case Update_Item_Description -> {
+            case Update_Item_Description: {
                 productService.updateItemDescription(UUID.fromString(args[0]), args[1]);
+                break;
             }
-            case Update_Item_Price -> {
+            case Update_Item_Price: {
                 productService.updateItemPrice(UUID.fromString(args[0]), Double.parseDouble(args[1]));
+                break;
             }
-            case Update_Item_Quantity -> {
+            case Update_Item_Quantity: {
                 productService.updateItemQuantity(UUID.fromString(args[0]), Integer.parseInt(args[1]));
+                break;
             }
         }
         return null;

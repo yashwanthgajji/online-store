@@ -11,21 +11,21 @@ public class AuthorizationService {
         permissions.put(UserRole.CUSTOMER, new HashMap<>());
         permissions.get(UserRole.CUSTOMER).put(
                 ServicePoint.PRODUCT,
-                new ArrayList<>(List.of(HTTPMethod.GET))
+                new ArrayList<>(Arrays.asList(HTTPMethod.GET))
         );
         permissions.get(UserRole.CUSTOMER).put(
                 ServicePoint.CART,
-                new ArrayList<>(List.of(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
+                new ArrayList<>(Arrays.asList(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
         );
         //Admin Permissions
         permissions.put(UserRole.ADMIN, new HashMap<>());
         permissions.get(UserRole.ADMIN).put(
                 ServicePoint.PRODUCT,
-                new ArrayList<>(List.of(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
+                new ArrayList<>(Arrays.asList(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
         );
         permissions.get(UserRole.ADMIN).put(
                 ServicePoint.USER,
-                new ArrayList<>(List.of(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
+                new ArrayList<>(Arrays.asList(HTTPMethod.GET, HTTPMethod.PUT, HTTPMethod.DELETE))
         );
     }
 

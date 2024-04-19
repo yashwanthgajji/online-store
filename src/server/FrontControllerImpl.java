@@ -34,14 +34,24 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
         String res = "Unknown Request";
         switch (request) {
             //User Requests
-            case Get_UserName -> res = (String) userController.handleRequest(Requests.Get_UserName, args);
-            case Register_New_Customer -> res = (String) authenticationController.handleRequest(Requests.Register_New_Customer, args);
-            case Login -> res = (String) authenticationController.handleRequest(Requests.Login, args);
-            case IsUserAdmin -> {
+            case Get_UserName: {
+                res = (String) userController.handleRequest(Requests.Get_UserName, args);
+                break;
+            }
+            case Register_New_Customer: {
+                res = (String) authenticationController.handleRequest(Requests.Register_New_Customer, args);
+                break;
+            }
+            case Login: {
+                res = (String) authenticationController.handleRequest(Requests.Login, args);
+                break;
+            }
+            case IsUserAdmin: {
                 UserRole userRole = (UserRole) userController.handleRequest(Requests.Get_User_Role, args);
                 res = String.valueOf(userRole == UserRole.ADMIN);
+                break;
             }
-            case Add_New_Admin -> {
+            case Add_New_Admin: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
@@ -52,8 +62,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case View_All_Customers -> {
+            case View_All_Customers: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
@@ -63,8 +74,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Add_New_Customer -> {
+            case Add_New_Customer: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
@@ -75,8 +87,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Remove_Customer -> {
+            case Remove_Customer: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.USER,
@@ -87,9 +100,10 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
             //Product Requests
-            case View_All_Products -> {
+            case View_All_Products: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -99,8 +113,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Add_New_Product -> {
+            case Add_New_Product: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -113,8 +128,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Remove_Product -> {
+            case Remove_Product: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -124,8 +140,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Update_Item_Description -> {
+            case Update_Item_Description: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -135,8 +152,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Update_Item_Price -> {
+            case Update_Item_Price: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -146,8 +164,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
-            case Update_Item_Quantity -> {
+            case Update_Item_Quantity: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.PRODUCT,
@@ -157,9 +176,10 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 } else {
                     res = "Unauthorized Request";
                 }
+                break;
             }
             //Cart Requests
-            case View_All_CartItems -> {
+            case View_All_CartItems: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
@@ -167,8 +187,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 )) {
                     res = (String) cartController.handleRequest(Requests.View_All_CartItems, args);
                 }
+                break;
             }
-            case Add_Item_To_Cart -> {
+            case Add_Item_To_Cart: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
@@ -176,8 +197,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 )) {
                     res = (String) cartController.handleRequest(Requests.Add_Item_To_Cart, args);
                 }
+                break;
             }
-            case Update_Item_Quantity_In_Cart -> {
+            case Update_Item_Quantity_In_Cart: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
@@ -185,8 +207,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 )) {
                     res = (String) cartController.handleRequest(Requests.Update_Item_Quantity_In_Cart ,args);
                 }
+                break;
             }
-            case Remove_Item_From_Cart -> {
+            case Remove_Item_From_Cart: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
@@ -194,8 +217,9 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 )) {
                     cartController.handleRequest(Requests.Remove_Item_From_Cart, args);
                 }
+                break;
             }
-            case Purchase -> {
+            case Purchase: {
                 if (authorizationService.isAuthorized(
                         (UserRole) userController.handleRequest(Requests.Get_User_Role, args),
                         ServicePoint.CART,
@@ -203,6 +227,7 @@ public class FrontControllerImpl extends UnicastRemoteObject implements FrontCon
                 )) {
                     res = (String) cartController.handleRequest(Requests.Purchase, args);
                 }
+                break;
             }
         }
         return res;

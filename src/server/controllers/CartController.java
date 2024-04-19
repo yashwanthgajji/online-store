@@ -24,7 +24,7 @@ public class CartController implements MainController {
     @Override
     public Object handleRequest(Requests request, String[] args) {
         switch (request) {
-            case Purchase -> {
+            case Purchase: {
                 UUID uid = UUID.fromString(args[0]);
                 List<CartItem> cartItems = cartService.getAllUserCartItems(uid);
                 double totalPurchaseCost = 0;
@@ -60,7 +60,7 @@ public class CartController implements MainController {
                 sb.append("Total: ").append(totalPurchaseCost).append("\n");
                 return sb.toString();
             }
-            case View_All_CartItems -> {
+            case View_All_CartItems: {
                 List<CartItem> cartItems = cartService.getAllUserCartItems(UUID.fromString(args[0]));
                 StringBuilder sb = new StringBuilder();
                 sb.append("********* CART *********\n");
@@ -85,7 +85,7 @@ public class CartController implements MainController {
                 }
                 return sb.toString();
             }
-            case Add_Item_To_Cart -> {
+            case Add_Item_To_Cart: {
                 Product product = productService.getProduct(UUID.fromString(args[1]));
                 if (product.getQuantityAvailable() >=  Integer.parseInt(args[2])) {
                     CartItem cartItem = new CartItem(UUID.fromString(args[1]), Integer.parseInt(args[2]));
@@ -95,7 +95,7 @@ public class CartController implements MainController {
                     return "Try less quantity. Stock not available";
                 }
             }
-            case Update_Item_Quantity_In_Cart -> {
+            case Update_Item_Quantity_In_Cart: {
                 UUID uid = UUID.fromString(args[0]);
                 UUID cid = UUID.fromString(args[1]);
                 CartItem cartItem = cartService.getCartItem(uid, cid);
@@ -107,8 +107,9 @@ public class CartController implements MainController {
                     return "Try less quantity. Stock not available";
                 }
             }
-            case Remove_Item_From_Cart -> {
+            case Remove_Item_From_Cart: {
                 cartService.removeItemFromCart(UUID.fromString(args[0]), UUID.fromString(args[1]));
+                break;
             }
         }
         return null;

@@ -14,7 +14,7 @@ public class ClientStore {
     private static FrontController frontController;
     private static Scanner sc;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws RemoteException {
 
         System.out.println("*** Connecting to Server ***");
         try {
@@ -29,7 +29,7 @@ public class ClientStore {
         startView();
     }
 
-    private static void startView() throws Exception {
+    private static void startView() throws RemoteException {
         System.out.println("********* WELCOME *********");
         int regLog = 0;
         while (regLog != 3) {
@@ -37,19 +37,30 @@ public class ClientStore {
                     "2. Login\n3. Exit\n");
             regLog = Integer.parseInt(sc.nextLine());
             switch (regLog) {
-                case 1 -> registrationPage();
-                case 2 -> {
+                case 1: {
+                    registrationPage();
+                    break;
+                }
+                case 2: {
                     loginPage();
                     if (sessionUserID != null) {
                         startDashboard();
                     } else {
                         System.out.println("Login unsuccessful...");
                     }
+                    break;
                 }
-                case 3 -> System.out.println("Bye!!! See you again...");
-                default -> System.out.println("Enter valid key...");
+                case 3: {
+                    System.out.println("Bye!!! See you again...");
+                    break;
+                }
+                default: {
+                    System.out.println("Enter valid key...");
+                    break;
+                }
             }
         }
+        System.out.println("Footnote: Developed by Yashwanth Gajji");
     }
 
     private static void registrationPage() throws RemoteException {

@@ -3,16 +3,16 @@ package server.controllers;
 public class ControllerFactory {
     public static MainController createController(ControllerType controllerType) {
         switch (controllerType) {
-            case AuthenticationController -> {
+            case AuthenticationController: {
                 return new AuthenticationController();
             }
-            case UserController -> {
+            case UserController: {
                 return new UserController();
             }
-            case ProductController -> {
+            case ProductController: {
                 return new ProductController();
             }
-            case CartController -> {
+            case CartController: {
                 return new CartController();
             }
         }

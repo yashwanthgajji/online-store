@@ -19,17 +19,18 @@ public class UserController implements MainController {
     @Override
     public Object handleRequest(Requests request, String[] args) {
         switch (request) {
-            case Get_UserName -> {
+            case Get_UserName: {
                 return userService.getUserName(UUID.fromString(args[0]));
             }
-            case Get_User_Role -> {
+            case Get_User_Role: {
                 return userService.getUserRole(UUID.fromString(args[0]));
             }
-            case Add_New_Admin -> {
+            case Add_New_Admin: {
                 User admin = new User(args[0], args[1], args[2]);
                 userService.addNewAdmin(admin);
+                break;
             }
-            case View_All_Customers -> {
+            case View_All_Customers: {
                 List<User> customers = userService.getAllCustomers();
                 StringBuilder sb = new StringBuilder();
                 sb.append("********* CUSTOMERS *********\n");
@@ -49,12 +50,14 @@ public class UserController implements MainController {
                 }
                 return sb.toString();
             }
-            case Requests.Add_New_Customer -> {
+            case Add_New_Customer: {
                 User customer = new User(args[0], args[1], args[2]);
                 userService.addNewCustomer(customer);
+                break;
             }
-            case Requests.Remove_Customer -> {
+            case Remove_Customer: {
                 userService.removeCustomer(UUID.fromString(args[0]));
+                break;
             }
         }
         return null;

@@ -17,18 +17,20 @@ public class AuthenticationController implements MainController {
     public Object handleRequest(Requests request, String[] args) {
         String res = "Unknown Request";
         switch (request) {
-            case Register_New_Customer -> {
+            case Register_New_Customer: {
                 User user = new User(args[0], args[1], args[2]);
                 userService.registerNewCustomer(user);
                 res = "Registration Successful...";
+                break;
             }
-            case Login -> {
+            case Login: {
                 UUID userID = userService.login(args[0], args[1]);
                 if (userID ==  null) {
                     res = "Invalid Username/Password";
                 } else {
                     res = userID.toString();
                 }
+                break;
             }
         }
         return res;
