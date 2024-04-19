@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CartRepo {
     private static CartRepo cartRepoInstance = null;
 
-    public static CartRepo getCartRepoInstance() {
+    public static synchronized CartRepo getCartRepoInstance() {
         if (cartRepoInstance == null) {
             cartRepoInstance = new CartRepo();
         }

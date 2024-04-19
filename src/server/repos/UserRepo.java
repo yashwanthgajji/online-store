@@ -13,7 +13,7 @@ public class UserRepo {
 
     private static UserRepo userRepoInstance = null;
 
-    public static UserRepo getUserRepoInstance() {
+    public static synchronized UserRepo getUserRepoInstance() {
         if (userRepoInstance == null) {
             userRepoInstance = new UserRepo();
         }

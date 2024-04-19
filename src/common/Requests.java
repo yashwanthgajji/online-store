@@ -1,6 +1,8 @@
 package common;
 
-public enum Requests {
+import java.io.Serializable;
+
+public enum Requests implements Serializable {
     Get_UserName,
     Register_New_Customer,
     Login,

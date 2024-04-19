@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductRepo {
     private static ProductRepo productRepoInstance = null;
-    public static ProductRepo getProductRepoInstance() {
+    public static synchronized ProductRepo getProductRepoInstance() {
         if (productRepoInstance == null) {
             productRepoInstance = new ProductRepo();
         }
@@ -23,10 +23,6 @@ public class ProductRepo {
         this.products.put(s1.getProductID(), s1);
         Product s2 = new Product("Hammer", "Hammer", 35.99, 7);
         this.products.put(s2.getProductID(), s2);
-    }
-
-    public static void setProductRepoInstance(ProductRepo productRepoInstance) {
-        ProductRepo.productRepoInstance = productRepoInstance;
     }
 
     public void insertProduct(Product product) {

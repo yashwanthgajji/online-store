@@ -8,6 +8,7 @@ clean:
 	@echo "Removing .class files..."
 	@rm -rf bin
 	@rm -f online-store.jar
+	@find . -name '*.class' -delete
 	@echo "Done..."
 
 package:
