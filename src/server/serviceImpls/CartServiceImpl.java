@@ -1,40 +1,38 @@
 package server.serviceImpls;
 
-import common.models.CartItem;
+import server.models.CartItem;
 import server.repos.CartRepo;
-import common.services.CartService;
+import server.services.CartService;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class CartServiceImpl extends UnicastRemoteObject implements CartService {
+public class CartServiceImpl implements CartService {
 
     private final CartRepo cartRepo = CartRepo.getCartRepoInstance();
 
-    public CartServiceImpl() throws RemoteException {
+    public CartServiceImpl() {
     }
 
     @Override
-    public void addItemToCart(UUID userID, CartItem cartItem) throws RemoteException {
+    public void addItemToCart(UUID userID, CartItem cartItem) {
         cartRepo.addNewCartItem(userID, cartItem);
     }
 
     @Override
-    public void updateItemQuantityInCart(UUID userID, UUID cartItemID, int quantity) throws RemoteException {
+    public void updateItemQuantityInCart(UUID userID, UUID cartItemID, int quantity) {
         cartRepo.updateCartItemQuantity(userID, cartItemID, quantity);
     }
 
     @Override
-    public void removeItemFromCart(UUID userID, UUID cartItemID) throws RemoteException {
+    public void removeItemFromCart(UUID userID, UUID cartItemID) {
         cartRepo.deleteCartItem(userID, cartItemID);
     }
 
     @Override
-    public List<CartItem> getAllUserCartItems(UUID userID) throws RemoteException {
+    public List<CartItem> getAllUserCartItems(UUID userID) {
         List<CartItem> allCartItems = new ArrayList<>();
         Map<UUID, CartItem> cartItemMap = cartRepo.getAllUserCartItems(userID);
         if (cartItemMap != null) {
@@ -46,7 +44,7 @@ public class CartServiceImpl extends UnicastRemoteObject implements CartService 
     }
 
     @Override
-    public CartItem getCartItem(UUID userID, UUID cartItemID) throws RemoteException {
+    public CartItem getCartItem(UUID userID, UUID cartItemID) {
         return cartRepo.getCartItem(userID, cartItemID);
     }
 }

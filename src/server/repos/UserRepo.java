@@ -1,7 +1,7 @@
 package server.repos;
 
-import common.enums.UserRole;
-import common.models.User;
+import server.auth.UserRole;
+import server.models.User;
 
 import java.util.Map;
 import java.util.UUID;
@@ -13,7 +13,7 @@ public class UserRepo {
 
     private static UserRepo userRepoInstance = null;
 
-    public static UserRepo getUserRepoInstance() {
+    public static synchronized UserRepo getUserRepoInstance() {
         if (userRepoInstance == null) {
             userRepoInstance = new UserRepo();
         }

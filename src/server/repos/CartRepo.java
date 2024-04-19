@@ -1,6 +1,6 @@
 package server.repos;
 
-import common.models.CartItem;
+import server.models.CartItem;
 
 import java.util.Map;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CartRepo {
     private static CartRepo cartRepoInstance = null;
 
-    public static CartRepo getCartRepoInstance() {
+    public static synchronized CartRepo getCartRepoInstance() {
         if (cartRepoInstance == null) {
             cartRepoInstance = new CartRepo();
         }
